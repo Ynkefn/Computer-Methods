@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="tab_FlowReport">
     <attribute name="title">
@@ -386,6 +386,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="text">
+     <string>20</string>
+    </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -397,7 +400,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Flowrate:                                    gpm</string>
+     <string>Flowrate:                                    in^3/s</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -422,6 +425,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="text">
+     <string>10</string>
+    </property>
    </widget>
    <widget class="QRadioButton" name="radioButton_ConstantPressureSource">
     <property name="geometry">
@@ -436,7 +442,7 @@
      <string>Constant Pressure Source</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_PumpSpurce">
+   <widget class="QRadioButton" name="radioButton_PumpSource">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -654,7 +660,7 @@
    <zorder>label_2</zorder>
    <zorder>lineEdit_SourcePressure</zorder>
    <zorder>radioButton_ConstantPressureSource</zorder>
-   <zorder>radioButton_PumpSpurce</zorder>
+   <zorder>radioButton_PumpSource</zorder>
    <zorder>groupBox_4</zorder>
    <zorder>pushButton_AnalyzeFlow</zorder>
    <zorder>groupBox_5</zorder>

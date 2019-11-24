@@ -23,16 +23,26 @@ class main_window(QDialog):                     # Main Window standard stuff
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
         self.assign_widgets()
-
         self.setupGLWindows()
 
         self.Pipe = Pipe()                      # Declare variables
-
+        self.selected = "Q"
         self.show()
+        self.flowrate = 0.0
+        self.pressure = 0.0
 
     def assign_widgets(self):               # Widgets
         self.ui.pushButton_exit.clicked.connect(self.ExitApp)
         self.ui.pushButton_GetFlowSystemFile.clicked.connect(self.GetPipe)
+        self.ui.pushButton_AnalyzeFlow.clicked.connect(self.AnalyzeFlow)
+        #self.ui.pushButton_GenerateCurves(self.GenerateCurves)
+        #self.ui.pushButton_RefreshSketch(self.RefreshSketch)
+        #self.ui.pushButton_Save(self.Save)
+        #self.ui.pushButton_SaveAs(self.SaveAs)
+
+        self.ui.radioButton_ConstantFlowrateSource.clicked.connect(self.RadioChanged)
+        self.ui.radioButton_ConstantPressureSource.clicked.connect(self.RadioChanged)
+        self.ui.radioButton_PumpSource.clicked.connect(self.RadioChanged)
 
     def setupGLWindows(self):
         self.glwindow1 = gl2D(self.ui.openGLWidget, self.DrawingCallback)
@@ -46,6 +56,41 @@ class main_window(QDialog):                     # Main Window standard stuff
 
     def DrawingCallback(self):
         self.Pipe.DrawPipePicture()
+
+    def RadioChanged(self):
+        if self.ui.radioButton_ConstantFlowrateSource.isChecked():
+            self.selected = "Q"
+            self.flowrate = float(self.ui.lineEdit_SourceFlowrate.text())
+
+        elif self.ui.radioButton_ConstantPressureSource.isChecked():
+            self.selected = "P"
+            self.pressure = float(self.ui.lineEdit_SourcePressure.text())
+
+        elif self.ui.radioButton_PumpSource.isChecked():
+            self.selected = "Pump"
+            self.pumpID = self.ui.Pump_Selection
+        return
+
+    def AnalyzeFlow(self):
+        self.ui.lineEdit_Flowrate.setText('{:.2f}'.format(self.flowrate))
+        self.ui.lineEdit_Pressure.setText('{:.2f}'.format(self.pressure))
+        self.power = self.flowrate * self.pressure
+        self.ui.lineEdit_FluidPower.setText('{:.2f}'.format(self.power))
+        # more shit
+
+    def GenerateCurves(self):
+        self.minFlow = float(self.ui.lineEdit_MinFlow.text())
+        self.maxFlow = float(self.ui.lineEdit_MaxFlow.text())
+        """probably look at homework 10 for inspiration on how to do this"""
+
+    def RefreshSketch(self):
+        """code"""
+
+    def Save(self):
+        """save"""
+
+    def SaveAs(self):
+        """does this need to be a separate function or can it be part of the Save?"""
 
     def GetPipe(self):
         filename = QFileDialog.getOpenFileName()[0]     # Read Filename
