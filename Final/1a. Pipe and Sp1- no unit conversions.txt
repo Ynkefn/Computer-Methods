@@ -1,0 +1,37 @@
+title, Pipe and Device - no unit conversions
+
+distance_unit,  in
+force_unit,  lbf 
+time_unit, s
+
+flow_unit, in^3/s,  1    # no conversion
+pressure_unit, psi, 1   # no conversion
+head_unit, in, 1   # no conversion
+
+gravity, 386.2,  in/s^2
+roughness, 0.000006, in
+density, 0.00009357,   lbf-s^2/in^4
+viscosity, 0.0000001291,  lbf-s/in^2
+
+nodes, (a,0,0,0), (b,200,0,0), (c,1000,0,0), (d,1200,0,0)
+
+ref_nodes, (a,0), (d,0)
+
+pipes, (b,c,800,0.5)
+
+devices, (sp1,  c, d)
+
+source, a, b
+
+
+# Pump Library - pump ID,  Description, shutoff head,(c0,c1,c2,c3), (d0,d1,d2,d3)
+# Pump coefficients must give pump HEAD in terms of pump flowrate (both in preferred units)
+pump_data,  Taco4,  Taco Pump 4 (006b),  117, 116.89, -0.7546, -0.04226, 0,     0,0,0,0
+pump_data,  Taco8,  Taco Pump 8 (0010),  121, 121.66, -0.12499, -0.0065576, 0, 0,0,0,0
+pump_data,  Taco6,  Taco Pump 6 (008),  182, 182.71, -0.38182, -0.050437, 0,     0,0,0,0
+
+# Device coefficients must give  HEAD in terms of flowrate (both in preferred units)
+# Device Library -  device ID,  Description, c0, c1, c2, c3
+device_data,  LM024,   LM024, -3.874, 0.9229, 0.09181, 0
+device_data,  sp1,   small sprinkler head,  0, 0.77922, 1.1172, 0.51939
+device_data,  hose,  2 inch firehose,  0, 0.0077922, 0.011172, 0.005193

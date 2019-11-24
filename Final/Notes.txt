@@ -1,0 +1,30 @@
+F Solve - how many unknowns?
+pressure at plain nodes are unknowns to solve for (there are 6)
++ 1 more unknown (guess of flow at supply)
+7 total unknowns - need 7 total true equation
+and an error function that returns 7 errors
+
+Inside error function it will recieve an array of current guesses (not initial guesses)
+the current guesses will be pressures at plain nodes and then last unknown/guess is entrance flow
+(dont have to stick to that order but is dela certified)
+need ability to store data at each node
+may have array of node names, array of node _'s, ___'s, etc
+take pressure information and write it to each node
+
+the 1st number in fsolve goes to pressure of 1st node, 2nd number goes to 2nd node, etc
+(don't have to use that order but that's dela's recommendation; stay consistent )
+
+data file tells pipes where its nodes are, pipe can go look up the pressure at its two nodes
+and calculate difference in pressure between the two nodes
+
+in homework, we told the pipes what the flow was and it calculated stuff
+now we give it a guess for delta P and tell it to go calculate flow
+they are inverses... so use an fsolve to calculate flow
+
+loop over all nodes
+loop over all pipes
+loop over all devices (two of them; a pipe represented by a cubic equation)
+    tell one to find its beginning and ending nodes
+    find its flow coefficients (will need to convert to standard units)
+    convert again to report head in standard units
+    (conversion factors in .txt document)

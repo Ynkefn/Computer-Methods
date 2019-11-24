@@ -1,0 +1,72 @@
+title, Borehole 1
+# AlDawood 30 440 4.5 LM024 1
+
+
+# fundamental units - used internally for all calculations
+distance_unit,  in
+force_unit,  lbf
+time_unit, s
+
+
+# preferred I/O units - conversion from fundamental units - for reporting
+keyword, unit name, conversion factor from given unit to fundamental units
+
+flow_unit, gpm,  3.85    # gpm * 3.85 --> in^3/s
+pressure_unit, psi, 1   # no conversion
+head_unit, ft, 12   # ft * 12 --> inches
+
+gravity, 386.2,  in/s^2
+roughness, 0.00078, in
+density, 0.00009164,   lbf-s^2/in^4 # 15% methanol
+viscosity, 0.0000002145,  lbf-s/in^2
+
+
+#     node data contains (node ID, x(in), y(in), z(in))
+nodes, (a,0,-2,72), (b,0,0,72), (c,0,1,72), (d,0,2,72) # elevated 6 feet
+nodes, (e,0,3,0), (f,6,3,0), (g,6,2,0), (h,6,-2,0), (i,6,-3,0), (j,0,-3,0)  # ground level
+nodes, (b10,4,2,0), (b1mid,4,0,-5280), (b11,4,-2,0)
+nodes, (b20,8,2,0),(b2mid,8,0,-5280),  (b21,8,-2,0)
+
+# keyword, node ID,  pressure
+ref_nodes, (c,  0)
+
+#      (beginning node ID, end node ID, total equivalent length (in), diameter(in))
+pipes, (b,c,48,1.062) # pump connection to HP - Minor loss
+pipes, (d,e,72,1.062), (e,f,240,1.062), (f,g,12,1.062) # add fittings later
+pipes, (h,i,12,1.062), (i,j,240,1.062), (j,a,72,1.062) # add fittings later
+pipes, (g,b10,360,1.062), (b10,b1mid,5328,1.062),(b1mid,b11,5328,1.062), (b11,h,360,1.062) # loop 1
+pipes, (g,b20,360,1.062), (b20,b2mid,5328,1.062),(b2mid,b21,5328,1.062), (b21,h,360,1.062) # loop 2
+
+#      (device ID, beginning node ID, end node ID )
+devices, LM024,a,b
+
+
+#keyword, inlet node ID,  exit node ID
+source, c, d
+
+
+
+ Pump Library - pump ID,  Description, shutoff head,(c0,c1,c2,c3), (d0,d1,d2,d3)
+# Pump coefficients must give pump HEAD in terms of pump flowrate (both in preferred units)
+pump_data,  Taco4,  Taco Pump 4 (006b),  9, 9.7407, -0.2421, -0.0522, 0,     0,0,0,0
+pump_data,  Taco8,  Taco Pump 8 (010),  10, 10.138, -0.0401, -0.0081, 0, 0,0,0,0
+pump_data,  Taco6,  Taco Pump 6 (008),  15, 15.227, -0.1225, -0.0623, 0,     0,0,0,0
+
+# Device coefficients must give  HEAD in terms of flowrate (both in preferred units)
+# Device Library -  device ID,  Description, c0, c1, c2, c3
+device_data,  LM024,   LM024, -0.3228, 0.2961, 0.1134, 0 # using preferred units
+device_data,  sp1,   small sprinkler head,  0, 0.25, 1.38, 2.47
+device_data,  hose,  2 inch firehose,   0, 0.0025, 0.0138, 0.0247
+
+
+
+
+
+
+
+
+
+
+
+
+

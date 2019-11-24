@@ -1,0 +1,78 @@
+title, Jake's Example Flow Problem
+
+# fundamental units - used internally for all calculations
+distance_unit,  in
+force_unit,  lbf
+time_unit, s
+
+
+# preferred I/O units - conversion from fundamental units - for reporting
+keyword, unit name, conversion factor from given unit to fundamental units
+flow_unit, gpm,  3.85    # gpm * 3.85 --> in^3/s
+pressure_unit, psi, 1   # no conversion
+head_unit, ft, 12   # ft * 12 --> inches
+
+# these values must be expresses in fundamental units
+gravity, 386.2,  in/s^2
+roughness, 0.000006, in
+density, 0.00009357,   lbf-s^2/in^4
+viscosity, 0.0000001291,  lbf-s/in^2
+
+
+# Nodes - all connection points used to build the system
+#     most nodes are simple interior nodes with unknown pressure
+#     Later in the file, some nodes may have their pressure specified
+#
+#     Note: x-y-z location are NOT used to calculate pipe length.  x and y simply help draw the
+#     plan view schematic.  z is used to incorporate head loss due to height differences
+#     node data contains (node ID, x(in), y(in), z(in))
+nodes, (a,0,600,0), (b,2400,600,0), (c,2400,-600,0)
+nodes, (d,0,-600,0), (e,0,0,0), (f,2400,0,0)
+
+
+
+# Known Pressure Nodes - sets a known presssure for an existing node (created above) .
+# Every system must have at least one node with known pressure!!
+# These nodes serve two primary purposes:
+#	in a closed loop system, one reference pressure must be known
+#	in open loop systems, flows into and out of the system MUST occur at nodes of known pressure.
+#	   ex: pump suction from a known reservoir pressure, sprinkler head flow to atm. pressure.
+#
+# keyword, node ID,  pressure
+ref_nodes, (c,  0)
+
+# Pipes - positive flow values are directed from beginning to end nodes
+# pipe flow is calculated using the Darcy-Weisbach equation with the Churchill friction factor
+# pipe data contains:
+#      (beginning node ID, end node ID, total equivalent length (in), diameter(in))
+pipes, (a,b,3600,0.5), (e,a,600,0.66), (f,b,600,0.66)
+
+pipes, (e,d,600,0.66), (e,f,3600,0.50), (f,c,600,0.66)
+
+
+# Flow resistance devices
+#	positive flow values are directed from beginning to end nodes
+#	positive device pressures are the pressure DROP from beginning to end nodes
+# Flow device data contains:
+#      (device ID, beginning node ID, end node ID )
+
+
+# Flow source location - a flow source can be a pump, constant pressure or constant flow source
+# there can be only one flow source in the system
+#     flow sources create positive flow and an increase in pressure from the inlet node to the exit node
+#keyword, inlet node ID,  exit node ID
+source, c,d
+
+
+ Pump Library - pump ID,  Description, shutoff head,(c0,c1,c2,c3), (d0,d1,d2,d3)
+# Pump coefficients must give pump HEAD in terms of pump flowrate (both in preferred units)
+pump_data,  Taco4,  Taco Pump 4 (006b),  9, 9.7407, -0.2421, -0.0522, 0,     0,0,0,0
+pump_data,  Taco8,  Taco Pump 8 (010),  10, 10.138, -0.0401, -0.0081, 0, 0,0,0,0
+pump_data,  Taco6,  Taco Pump 6 (008),  15, 15.227, -0.1225, -0.0623, 0,     0,0,0,0
+
+# Device coefficients must give  HEAD in terms of flowrate (both in preferred units)
+# Device Library -  device ID,  Description, c0, c1, c2, c3
+device_data,  LM024,   LM024, -0.3228, 0.2961, 0.1134, 0 # using preferred units
+device_data,  sp1,   small sprinkler head,  0, 0.25, 1.38, 2.47
+device_data,  hose,  2 inch firehose,   0, 0.0025, 0.0138, 0.0247
+
