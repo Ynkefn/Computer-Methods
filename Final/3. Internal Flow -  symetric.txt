@@ -8,9 +8,9 @@ time_unit, s
 
 # preferred I/O units - conversion from fundamental units - for reporting
 keyword, unit name, conversion factor from given unit to fundamental units
-flow_unit, gpm,  3.85    # gpm * 3.85 --> in^3/s
-pressure_unit, psi, 1   # no conversion
-head_unit, ft, 12   # ft * 12 --> inches
+flow_unit, gpm,  3.85,    # gpm * 3.85 --> in^3/s
+pressure_unit, psi, 1,   # no conversion
+head_unit, ft, 12,   # ft * 12 --> inches
 
 # these values must be expresses in fundamental units
 gravity, 386.2,  in/s^2
@@ -72,7 +72,8 @@ pump_data,  Taco6,  Taco Pump 6 (008),  15, 15.227, -0.1225, -0.0623, 0,     0,0
 
 # Device coefficients must give  HEAD in terms of flowrate (both in preferred units)
 # Device Library -  device ID,  Description, c0, c1, c2, c3
-device_data,  LM024,   LM024, -0.3228, 0.2961, 0.1134, 0 # using preferred units
+ # using preferred units
+device_data,  LM024,   LM024, -0.3228, 0.2961, 0.1134, 0
 device_data,  sp1,   small sprinkler head,  0, 0.25, 1.38, 2.47
 device_data,  hose,  2 inch firehose,   0, 0.0025, 0.0138, 0.0247
 

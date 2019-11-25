@@ -9,9 +9,9 @@ time_unit, s
 # preferred I/O units - conversion from fundamental units - for reporting
 keyword, unit name, conversion factor from given unit to fundamental units
 
-flow_unit, gpm,  0.002228    # gpm * 0.00228 --> ft^3/s
-pressure_unit, psi, 144   # psi * 144 --> psf
-head_unit, ft, 1   #no conversion
+flow_unit, gpm,  0.002228,    # gpm * 0.00228 --> ft^3/s
+pressure_unit, psi, 144,   # psi * 144 --> psf
+head_unit, ft, 1,   #no conversion
 
 gravity, 32.174,  ft/s^2
 roughness, 0.000065, ft
@@ -20,8 +20,10 @@ viscosity, 0.00003089,  lbf-s/ft^2
 
 
 #     node data contains (node ID, x, y, z)
-nodes, (a,0,-2,6), (b,0,0,6), (c,0,1,6), (d,0,2,6) # elevated 6 feet
-nodes, (e,0,3,0), (f,6,3,0), (g,6,2,0), (h,6,-2,0), (i,6,-3,0), (j,0,-3,0)  # ground level
+ # elevated 6 feet
+nodes, (a,0,-2,6), (b,0,0,6), (c,0,1,6), (d,0,2,6)
+  # ground level
+nodes, (e,0,3,0), (f,6,3,0), (g,6,2,0), (h,6,-2,0), (i,6,-3,0), (j,0,-3,0)
 nodes, (b10,4,2,0), (b1mid,4,0,-440), (b11,4,-2,0)
 nodes, (b20,8,2,0),(b2mid,8,0,-440),  (b21,8,-2,0)
 
@@ -29,11 +31,16 @@ nodes, (b20,8,2,0),(b2mid,8,0,-440),  (b21,8,-2,0)
 ref_nodes, (c,  0)
 
 #      (beginning node ID, end node ID, total equivalent length , diameter)
-pipes, (b,c,4,0.0885) # pump connection to HP - Minor loss
-pipes, (d,e,6,0.0885), (e,f,20,0.0885), (f,g,1,0.0885) # add fittings later
-pipes, (h,i,1,0.0885), (i,j,20,0.0885), (j,a,6,0.0885) # add fittings later
-pipes, (g,b10,30,0.0885), (b10,b1mid,444,0.0885),(b1mid,b11,444,0.0885), (b11,h,30,0.0885) # loop 1
-pipes, (g,b20,30,0.0885), (b20,b2mid,444,0.0885),(b2mid,b21,444,0.0885), (b21,h,30,0.0885) # loop 2
+ # pump connection to HP - Minor loss
+pipes, (b,c,4,0.0885)
+ # add fittings later
+pipes, (d,e,6,0.0885), (e,f,20,0.0885), (f,g,1,0.0885)
+ # add fittings later
+pipes, (h,i,1,0.0885), (i,j,20,0.0885), (j,a,6,0.0885)
+ # loop 1
+pipes, (g,b10,30,0.0885), (b10,b1mid,444,0.0885),(b1mid,b11,444,0.0885), (b11,h,30,0.0885)
+ # loop 2
+pipes, (g,b20,30,0.0885), (b20,b2mid,444,0.0885),(b2mid,b21,444,0.0885), (b21,h,30,0.0885)
 
 #      (device ID, beginning node ID, end node ID )
 devices, LM024,a,b

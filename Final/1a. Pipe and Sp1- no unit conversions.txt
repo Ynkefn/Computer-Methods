@@ -4,9 +4,9 @@ distance_unit,  in
 force_unit,  lbf 
 time_unit, s
 
-flow_unit, in^3/s,  1    # no conversion
-pressure_unit, psi, 1   # no conversion
-head_unit, in, 1   # no conversion
+flow_unit, in^3/s,  1,    # no conversion
+pressure_unit, psi, 1,   # no conversion
+head_unit, in, 1,   # no conversion
 
 gravity, 386.2,  in/s^2
 roughness, 0.000006, in

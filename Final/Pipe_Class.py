@@ -50,6 +50,7 @@ class PumpData:
 class DeviceData:
     def __init__(self):
         ## NEED ALL VARIABLES STILL ##
+        self.test = None
 
 class Pipe:
     def __init__(self, ):
@@ -196,8 +197,8 @@ class Pipe:
             x2 = pipe.nodeEnd.x
             y2 = pipe.nodeEnd.y
 
-            glColor3f(0, 1, 0)
-            glLineWidth(1)
+            glColor3f(0, .75, 0)
+            glLineWidth(2)
             glBegin(GL_LINE_STRIP)
             glVertex2f(x1, y1)
             glVertex2f(x2, y2)
@@ -208,13 +209,18 @@ class Pipe:
             gl2DText(name, x1 + (x2-x1)/2, y1 + (y2-y1)/2)
 
         for node in self.node:
+            red = False
             radius = (self.DrawingSize[1]-self.DrawingSize[0]) / 60
             for ref in self.ref_nodes:
                 if ref.nodeID == node.name:
-                    glColor(1, 0, 0)
-                    gl2DCircle(node.x, node.y, radius, fill=True)
-                else:
-                    glColor3f(0, 1, 0)
-                    gl2DCircle(node.x, node.y, radius, fill=True)
+                    red = True
+
+            if red is True:
+                glColor(.75, 0, 0)
+                gl2DCircle(node.x, node.y, radius, fill=True)
+            else:
+                glColor3f(0, .75, 0)
+                gl2DCircle(node.x, node.y, radius, fill=True)
+
             glColor3f(0, 0, 0)
             gl2DText(node.name, node.x, node.y)
