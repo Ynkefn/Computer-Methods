@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_FlowReport">
     <attribute name="title">
@@ -519,7 +519,7 @@
     <widget class="QLineEdit" name="lineEdit_Flowrate">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>90</x>
        <y>40</y>
        <width>111</width>
        <height>22</height>
@@ -529,7 +529,7 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>30</x>
        <y>43</y>
        <width>231</width>
        <height>16</height>
@@ -542,7 +542,7 @@
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>30</x>
        <y>90</y>
        <width>211</width>
        <height>16</height>
@@ -555,7 +555,7 @@
     <widget class="QLineEdit" name="lineEdit_Pressure">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>90</x>
        <y>88</y>
        <width>111</width>
        <height>22</height>
@@ -568,7 +568,7 @@
     <widget class="QLineEdit" name="lineEdit_Head">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>90</x>
        <y>137</y>
        <width>111</width>
        <height>22</height>
@@ -581,7 +581,7 @@
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>50</x>
        <y>140</y>
        <width>211</width>
        <height>16</height>
@@ -594,8 +594,8 @@
     <widget class="QLineEdit" name="lineEdit_FluidPower">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>198</y>
+       <x>100</x>
+       <y>190</y>
        <width>101</width>
        <height>22</height>
       </rect>
@@ -607,20 +607,20 @@
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>198</y>
-       <width>71</width>
+       <x>20</x>
+       <y>193</y>
+       <width>81</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>Fluid Power</string>
+      <string>Fluid Power:</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_8">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>20</x>
        <y>220</y>
        <width>131</width>
        <height>16</height>
@@ -633,8 +633,8 @@
     <widget class="QLabel" name="label_9">
      <property name="geometry">
       <rect>
-       <x>229</x>
-       <y>200</y>
+       <x>210</x>
+       <y>190</y>
        <width>51</width>
        <height>20</height>
       </rect>
