@@ -1,10 +1,12 @@
 import numpy as np
+from scipy.optimize import fsolve
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
 from PipeDrawingClass import gl2D, gl2DText, gl2DCircle
+
 
 class Node:
     def __init__(self):         # Node Class holds all node values
@@ -22,6 +24,12 @@ class PipeLink:
         self.nodeEnd = None
         self.length = None
         self.diameter = None
+        self.flow = None
+
+    def flowcalc(self, rho, mu, eps, g):
+        """Maybe this should be in the Pipe Class but we need it somewhere to calculate pipes' flows"""
+
+
 
 class Source:
     def __init__(self):         # Source Class holds all source values
@@ -38,6 +46,10 @@ class Devices:                  # Devices Class holds all device values
         self.deviceID = None
         self.begNodeID = None
         self.endNodeID = None
+
+    def flowcalc(self, rho, mu, eps, g):
+        """devices need to be able to calculate their own flow
+           (unless we delete the calls to flowcalc below)"""
 
 class PumpData:
     def __init__(self):         # PumpData Class holds all pump_data values
@@ -77,6 +89,13 @@ class Pipe:
         self.pump_data = []
         self.device_data = []
         self.DrawingSize = None
+        self.supply = None
+
+    #def nodeByID(self, ID):
+
+    #def DeviceByID(self, ID):
+
+    #def pumpByID(self, ID):
 
     def ReadPipeData(self, data):
         for line in data:
@@ -207,6 +226,71 @@ class Pipe:
 
         self.DrawingSize = [xmin, xmax, ymin, ymax*1.25]
 
+    def AnalyzeFlowSystem(self, guesses = None, Q = None, deltaP = None, Pump = None):
+        def solver_equations(vals):
+            """fsolve equations"""
+            for i in range(len(self.ref_nodes)):
+                #put pressure guesses in ref nodes and start flowsum at 0
+                self.ref_nodes[i].pressure = vals[i]    #set node pressures
+                self.ref_nodes[i].flowsum = 0           #set node flow to 0
+
+            for pipe in self.pipes:
+                #use node pressures tp calculate pipeflows & update flowsums
+    ### DELA HAS A FLOWCALC FUNCITON IN BOTH HIS PIPES AND DEVICES;
+    ### IF WE WANNA USE THIS METHOD WE'LL HAVE TO ADD THEM TOO
+                pipe.flowcalc(rho, mu, eps, g)  #calc flow using node pressures
+                pipe.nodeEnd -= pipe.flow       #its possible this and the below line
+                pipe.nodeBeg += pipe.flow       #should be flipped
+
+            for dev in self.devices:
+                dev.flowcalc(rho, mu, eps, g)   #calc flow using node pressures
+                dev.node1.flowsum -= dev.flow   #flows out of node
+                dev.node2.flowsum += dev.flow   #flows into node
+
+            qguess = vals[len(vals)-1]      #supply flow is final unknown
+            self.sourceflow = qguess        #store it in sourceflow
+            self.source_node_flow_in.flowsum -= qguess  #subtracttt flow to source inlet node
+            errors = []     #error vector
+            for i in range(len(self.ref_nodes)):
+                #append node flow errors (hopefully 0)
+                errors.append(self.plain_nodes[i].flowsum)
+
+            if Q is not None:       #constant flow source checked
+                errors.append(Q - qguess)
+            if deltaP is not None:  #constant pressure checked
+                dp = self.source_node_flow_out.pressure - self.source_node_flow_in.pressure
+                errors.append(dp - deltaP)
+            if Pump is not None:    #pump source checked
+                myc = self.pumplist[Pump].c     #get coeffs
+
+                pumpPressure = myc[0] + myc[1]*qguess + myc[2]*qguess**2 + myc[3]*qguess**3
+                dp = self.source_node_flow_out.pressure - self.source_node_flow_in.pressure
+                errors.append(dp - pumpPressure)
+                pass
+            return errors
+
+        eps = self.roughness[0]
+        rho = self.density[0]
+        mu = self.viscosity[0]
+        g = self.gravity[0]
+
+        nnodes = len(self.ref_nodes)
+
+        if guesses is None:
+            guesses = np.linspace(1, 10, nnodes)*self.press_unit_conv
+            guesses = np.append(guesses, self.flow_unit_conv)
+
+        scales = np.ones_like(guesses)      #pressure guesses
+        scales[len(scales)-1] = self.flow_unit_conv / self.press_unit_conv
+
+        answer = fsolve(solver_equations, guesses, diag=scales)
+        errors = solver_equations(answer)
+        while np.linalg.norm(errors) / len(errors) > 10e-13:
+            answer = fsolve(solver_equations, answer, diag=scales)
+            errors = solver_equations(answer)
+        self.errors = np.linalg.norm(errors) / len(errors)
+        return answer
+
     def DrawPipePicture(self):
         x1, y1, x2, y2 = None, None, None, None     # This draws source lines
         for source in self.source:                  # Initialize x and y values and loop through source and node
@@ -265,6 +349,7 @@ class Pipe:
             name = pipe.begNodeName + pipe.endNodeName
             gl2DText(name, x1 + (x2-x1)/2, y1 + (y2-y1)/2)
 
+
         for node in self.node:
             red = False                         # Draw all nodes. Including reference nodes.
             radius = (self.DrawingSize[1]-self.DrawingSize[0]) / 60
@@ -281,3 +366,58 @@ class Pipe:
 
             glColor3f(0, 0, 0)
             gl2DText(node.name, node.x, node.y)
+
+    def Length(self, data):
+#### This doesn't work for some reason but I'm trying to get this to display the lengths when the checkmark is clicked
+        x1, y1, x2, y2 = None, None, None, None  # This draws source lines
+        for pipe in self.pipes:
+            x1 = pipe.nodeBeg.x  # Loop through all pipes and draw all pipes
+            y1 = pipe.nodeBeg.y
+            x2 = pipe.nodeEnd.x
+            y2 = pipe.nodeEnd.y
+            len = pipe.length
+            gl2DText(len, 1, 2)
+
+    def GenerateReport(self, data):
+### self.supply isn't updating for some reason even though I'm trying to get it to update
+### it in the main after one of the radio buttons is clicked
+        rpt = '                           Flow Analysis Report\n'
+        rpt += '\nTitle: {}\n'.format(self.title)
+        rpt += '\nSupply Type: {}'.format(self.supply)
+
+        #for link in self.links:
+
+        rpt += '\n\n'
+        return rpt
+
+#friction factor and stuff from Dela
+def churchill(eps, D, Re):
+    if Re < 0.01: return 0.1
+    th1 = (-2.457*np.log((7/Re)**0.9 + 0.27*eps/D))**16
+    th2 = (37530/Re)**16
+    f = 8 * ((8/Re)**12 + (th1 + th2)**-1.5)**(1/12)
+    return f
+
+def pipe_deltaP(Q, rho, mu, eps, g, L, D):
+    V = 4 * Q / np.pi / (D**2)
+    Re = rho * abs(V) * D / mu
+    f = churchill(eps, D, Re)
+    dp = f * L * abs(V) * V * rho / (2*D)
+    return dp
+
+def pipe_flow(dp, rho, mu, eps, g, L, D):
+    def rootfunc(Q):
+        error = pipe_deltaP(Q, rho, mu, eps, g, L, D) - dp
+        return error
+    qguess = 1
+    Q = fsolve(rootfunc, qguess)
+    return float(Q)
+
+def device_flow(dp, c0, c1, c2, c3):
+    def rootfunc(Q):
+        pressure = c0 + c1*Q + c2*Q**2 + c3*Q**3
+        error = pressure - dp
+        return error
+    qguess = 1
+    Q = fsolve(rootfunc, qguess)
+    return float(Q)
