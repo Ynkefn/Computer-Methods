@@ -6,3 +6,4 @@
 3. Austin Fulmer, 11/25/19, Added updated data files and ref_node functionality. Able to draw source lines. Able to draw all device lines except for files 8, 9, and 10. Will ask Dela on monday. Also added full file reading capabilities. Also add comments to Pipe_Class for
 easier understanding
 4. Evan Wright 12/1/19, The Gui is supposed to open up on the drawing tab which ours now sohuld. The Main and Class are updated with a lot of suggestions from Dela's 40 minute video but they're not fully functional as we will need for the nodes and pipes to calculate their own flow with this method and don't have that yet. The first line or two of the report now prints and an example of what the report should look like is uploaded.
+5. Evan Wright 12/2/19, Added report functionality and gui text labels update to match .txt files
