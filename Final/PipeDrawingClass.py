@@ -216,6 +216,8 @@ class gl2D():
         left = self.glXmin
 
         if self.allowDistortion == False:  # force no shape distortion
+            if self.glHeight == 0:
+                self.glHeight = 0.01
             windowShape = windowWidth / windowHeight
             drawingShape = self.glWidth / self.glHeight
             if drawingShape > windowShape:

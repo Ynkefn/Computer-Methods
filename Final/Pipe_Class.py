@@ -26,11 +26,6 @@ class PipeLink:
         self.diameter = None
         self.flow = None
 
-    def flowcalc(self, rho, mu, eps, g):
-        """Maybe this should be in the Pipe Class but we need it somewhere to calculate pipes' flows"""
-
-
-
 class Source:
     def __init__(self):         # Source Class holds all source values
         self.inletNodeID = None
@@ -89,7 +84,6 @@ class Pipe:
         self.pump_data = []
         self.device_data = []
         self.DrawingSize = None
-        self.supply = None
 
     #def nodeByID(self, ID):
 
@@ -249,7 +243,7 @@ class Pipe:
 
             qguess = vals[len(vals)-1]      #supply flow is final unknown
             self.sourceflow = qguess        #store it in sourceflow
-            self.source_node_flow_in.flowsum -= qguess  #subtracttt flow to source inlet node
+            self.source.inletNodeID.flowsum -= qguess  #subtracttt flow to source inlet node
             errors = []     #error vector
             for i in range(len(self.ref_nodes)):
                 #append node flow errors (hopefully 0)
@@ -261,18 +255,13 @@ class Pipe:
                 dp = self.source_node_flow_out.pressure - self.source_node_flow_in.pressure
                 errors.append(dp - deltaP)
             if Pump is not None:    #pump source checked
-                myc = self.pumplist[Pump].c     #get coeffs
+                myc = PumpData.self.cCoeff     #get coeffs
 
                 pumpPressure = myc[0] + myc[1]*qguess + myc[2]*qguess**2 + myc[3]*qguess**3
                 dp = self.source_node_flow_out.pressure - self.source_node_flow_in.pressure
                 errors.append(dp - pumpPressure)
                 pass
             return errors
-
-        eps = self.roughness[0]
-        rho = self.density[0]
-        mu = self.viscosity[0]
-        g = self.gravity[0]
 
         nnodes = len(self.ref_nodes)
 
@@ -378,17 +367,18 @@ class Pipe:
             len = pipe.length
             gl2DText(len, 1, 2)
 
-    def GenerateReport(self, data):
-### self.supply isn't updating for some reason even though I'm trying to get it to update
+    #def GenerateReport(self, data):
+### self.supply isn't updating for some reason even though I'm trying to update
 ### it in the main after one of the radio buttons is clicked
-        rpt = '                           Flow Analysis Report\n'
-        rpt += '\nTitle: {}\n'.format(self.title)
-        rpt += '\nSupply Type: {}'.format(self.supply)
+    #    rpt = '                           Flow Analysis Report\n'
+    #    rpt += '\nTitle: {}\n'.format(self.title)
+    #    rpt += '\nSupply Type: {}'.format(self.supply)
+    #    rpt += '\n\n Supply Flowrate:     1.185 gpm{}'.format()
 
         #for link in self.links:
 
-        rpt += '\n\n'
-        return rpt
+    #    rpt += '\n\n'
+    #    return rpt
 
 #friction factor and stuff from Dela
 def churchill(eps, D, Re):

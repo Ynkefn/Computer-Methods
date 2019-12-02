@@ -32,6 +32,9 @@ class main_window(QDialog):                     # Main Window standard stuff
         self.flowrate = 0.0
         self.pressure = 0.0
         #self.filename = 'None'
+        self.supply = None
+        self.head = None
+        self.power = None
 
 
     def assign_widgets(self):               # Widgets
@@ -81,8 +84,14 @@ class main_window(QDialog):                     # Main Window standard stuff
         self.glwindow1.setViewSize(xmin, xmax, ymin, ymax, allowDistortion=False)
         self.glwindow1.glUpdate()
 
-        rpt = self.Pipe.GenerateReport(data)
+        rpt = self.GenerateReport(data)
         self.ui.textEdit_report.setText(rpt)
+
+        self.ui.label_flowunit.setText(self.Pipe.flow_unit)
+        self.ui.label_flowunit_2.setText(self.Pipe.flow_unit)
+        self.ui.label_pressunit.setText(self.Pipe.press_unit)
+        self.ui.label_pressunit_2.setText(self.Pipe.press_unit)
+        self.ui.label_headunit.setText(self.Pipe.head_unit)
 
     def Length(self):
         """Doesnt work yet but trying to print the pipe lengths when the check for it is clicked"""
@@ -112,16 +121,16 @@ class main_window(QDialog):                     # Main Window standard stuff
         # This is where I'm trying to update Pipe.supply so in the class we can call
         # and print self.supply for the report but it's printing the original val of None
         if self.ui.radioButton_ConstantFlowrateSource.isChecked():
-            Pipe.supply = "Constant Flowrate"
+            self.supply = "Constant Flowrate"
             self.flowrate = float(self.ui.lineEdit_SourceFlowrate.text())
 
         elif self.ui.radioButton_ConstantPressureSource.isChecked():
-            Pipe.supply = "Constant Pressure"
+            self.supply = "Constant Pressure"
             self.pressure = float(self.ui.lineEdit_SourcePressure.text())
 
         elif self.ui.radioButton_PumpSource.isChecked():
             self.pumpID = self.ui.Pump_Selection.currentText()
-            Pipe.supply = 'Pump - {}'.format(self.pumpID)
+            self.supply = 'Pump - {}'.format(self.pumpID)
         return
 
     def AnalyzeFlow(self):
@@ -145,7 +154,37 @@ class main_window(QDialog):                     # Main Window standard stuff
     def SaveAs(self):
         """does this need to be a separate function or can it be part of the Save?"""
 
+    def GenerateReport(self, data):
+        rpt = '                                Flow Analysis Report\n'
+        rpt += '\nTitle: {}\n'.format(self.Pipe.title)
+        rpt += '\nSupply Type: {}'.format(self.supply)
+        rpt += '\n\n Supply Flowrate:               {} {}'.format(self.flowrate, self.Pipe.flow_unit)
+        rpt += '\n Supply Pressure:               {} {}'.format(self.pressure, self.Pipe.press_unit)
+        rpt += '\n Supply Head:                    {} {}'.format(self.head, self.Pipe.head_unit)
+        rpt += '\n Supply Power (fluid only):  {} {}*{}'.format(self.power, self.Pipe.flow_unit, self.Pipe.press_unit)
 
+        rpt += '\n\n --------------------     Node Summary     --------------------'
+        rpt += '\n\n Node     Elevation       Pressure       Head'
+        rpt += '\n              ({})            ({})           ({})'.format(self.Pipe.fund_dis_unit, self.Pipe.press_unit, self.Pipe.head_unit)
+        for node in self.Pipe.node:
+            rpt += '\n    {}         {:4.1f}              p           h'.format(node.name, node.z)
+
+        rpt += '\n\n --------------------     Pipe Summary     --------------------'
+        rpt += '\n                                             Friction     Friction     Total'
+        rpt += '\n\n Node1     Node2     Len.     Dia.     Flow     Press Loss     Head Loss     Head Loss'
+        rpt += '\n                             {}     {}      {}        {}               {}                   {}'.format(self.Pipe.fund_dis_unit, self.Pipe.fund_dis_unit, self.Pipe.flow_unit, self.Pipe.press_unit, self.Pipe.head_unit, self.Pipe.head_unit)
+        for pipe in self.Pipe.pipes:
+            rpt += '\n   {}         {}           {}        {}         {}           {}                {}                 {}'
+
+        rpt += '\n\n --------------------  Flow Device Summary  --------------------'
+        rpt += '\n                                             Friction     Friction     Total'
+        rpt += '\n\n Name     Node1     Node2     Flow     Press Loss     Head Loss     Head Loss'
+        rpt += '\n                             ({})       ({})          ({})          ({})'.format(self.Pipe.flow_unit, self.Pipe.press_unit, self.Pipe.head_unit, self.Pipe.head_unit)
+        for device in self.Pipe.devices:
+            rpt += '\n    {}          {}            {}           {}             {}            {}                 {}'
+
+        rpt += '\n\n'
+        return rpt
 
     def ExitApp(self):
         app.exit()

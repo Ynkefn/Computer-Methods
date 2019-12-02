@@ -400,7 +400,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Flowrate:                                    in^3/s</string>
+     <string>Flowrate:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -408,12 +408,12 @@
      <rect>
       <x>23</x>
       <y>153</y>
-      <width>231</width>
+      <width>61</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Pressure:                                    psi</string>
+     <string>Pressure:</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_SourcePressure">
@@ -460,7 +460,7 @@
      <rect>
       <x>20</x>
       <y>240</y>
-      <width>281</width>
+      <width>291</width>
       <height>81</height>
      </rect>
     </property>
@@ -509,7 +509,7 @@
      <rect>
       <x>20</x>
       <y>410</y>
-      <width>281</width>
+      <width>291</width>
       <height>251</height>
      </rect>
     </property>
@@ -536,7 +536,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Flowrate:                               in^3/s</string>
+      <string>Flowrate:</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_5">
@@ -544,12 +544,12 @@
       <rect>
        <x>30</x>
        <y>90</y>
-       <width>211</width>
+       <width>61</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>Pressure:                               psig</string>
+      <string>Pressure:</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="lineEdit_Pressure">
@@ -583,12 +583,12 @@
       <rect>
        <x>50</x>
        <y>140</y>
-       <width>211</width>
+       <width>41</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>Head:                               in</string>
+      <string>Head:</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="lineEdit_FluidPower">
@@ -635,12 +635,57 @@
       <rect>
        <x>210</x>
        <y>190</y>
-       <width>51</width>
+       <width>71</width>
        <height>20</height>
       </rect>
      </property>
      <property name="text">
       <string>lbf-in/s</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_flowunit_2">
+     <property name="geometry">
+      <rect>
+       <x>208</x>
+       <y>42</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>gpm</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_pressunit_2">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>90</y>
+       <width>51</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>psi</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_headunit">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>140</y>
+       <width>41</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>in</string>
      </property>
     </widget>
     <zorder>label_4</zorder>
@@ -653,6 +698,41 @@
     <zorder>label_7</zorder>
     <zorder>label_8</zorder>
     <zorder>label_9</zorder>
+    <zorder>label_flowunit_2</zorder>
+    <zorder>label_pressunit_2</zorder>
+    <zorder>label_headunit</zorder>
+   </widget>
+   <widget class="QLabel" name="label_flowunit">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>70</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>gpm</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::RichText</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_pressunit">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>150</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>psi</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::RichText</enum>
+    </property>
    </widget>
    <zorder>radioButton_ConstantFlowrateSource</zorder>
    <zorder>label</zorder>
@@ -664,6 +744,8 @@
    <zorder>groupBox_4</zorder>
    <zorder>pushButton_AnalyzeFlow</zorder>
    <zorder>groupBox_5</zorder>
+   <zorder>label_flowunit</zorder>
+   <zorder>label_pressunit</zorder>
   </widget>
   <widget class="QLabel" name="label_12">
    <property name="geometry">
