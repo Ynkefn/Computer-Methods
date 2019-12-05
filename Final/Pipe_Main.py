@@ -95,7 +95,7 @@ class main_window(QDialog):                     # Main Window standard stuff
 
     def Length(self):
         """Doesnt work yet but trying to print the pipe lengths when the check for it is clicked"""
-        #self.Pipe.Length()
+        self.Pipe.Length()
 
     def PumpChanged(self):
         text = self.ui.Pump_Selection.currentText()     # text equals whichever pump is selected
@@ -134,10 +134,13 @@ class main_window(QDialog):                     # Main Window standard stuff
         return
 
     def AnalyzeFlow(self):
-        self.ui.lineEdit_Flowrate.setText('{:.2f}'.format(self.flowrate))
         self.ui.lineEdit_Pressure.setText('{:.2f}'.format(self.pressure))
         self.power = self.flowrate * self.pressure
         self.ui.lineEdit_FluidPower.setText('{:.2f}'.format(self.power))
+        q = self.Pipe.AnalyzeFlowSystem(Q=self.flowrate)
+        q = float(q)
+        self.ui.lineEdit_Flowrate.setText('{:.2f}'.format(q))
+
         # the rest of analyze flow will be here
 
     def GenerateCurves(self):
