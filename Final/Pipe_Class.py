@@ -35,10 +35,10 @@ class Source:
         self.outletNodeID = None
         self.sourceflow = []
 
-#class Reference:                # Reference Class holds all reference values
-#    def __init__(self):
-#        self.nodeID = None
-#        self.pressure = None
+class Reference:                # Reference Class holds all reference values
+    def __init__(self):
+        self.nodeID = None
+        self.pressure = None
 
 class Devices:                  # Devices Class holds all device values
     def __init__(self):
@@ -149,6 +149,7 @@ class Pipe:
                     hold.append(value)
                 for i, j in enumerate(hold):
                     if i % 4 is 0:
+                        thispipe = PipeLink()
                         thispipe.begNodeName = hold[i-4]
                         thispipe.endNodeName = hold[i-3]
                         thispipe.length = float(hold[i-2])
@@ -172,6 +173,11 @@ class Pipe:
                         thisref.nodeID = hold[i-2]
                         thisref.pressure = hold[i-1]
                         self.ref_nodes.append(thisref)
+
+                        ref = Reference()  # Same as above
+                        ref.nodeID = hold[i - 2]
+                        ref.pressure = hold[i - 1]
+                        self.ref_nodes.append(ref)
 
             if keyword == 'devices':
                 hold = []
