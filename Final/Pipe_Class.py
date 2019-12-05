@@ -327,17 +327,17 @@ class Pipe:
 
             #scales = np.ones_like(guesses)  # pressure guesses
             #scales[len(scales) - 1] = self.flow_unit_conv / self.press_unit_conv
-            answer = fsolve(equations, guesses)
-            errors = equations(answer)
-            answer = fsolve(equations, answer)
+        answer = fsolve(equations, guesses)
+        errors = equations(answer)
+        answer = fsolve(equations, answer)
 
-            #while np.linalg.norm(errors) / len(errors) > 10e-13:
-            #    answer = fsolve(equations, answer, diag=scales)
-            #    errors = equations(answer)
-            #self.errors = np.linalg.norm(errors) / len(errors)
+        #while np.linalg.norm(errors) / len(errors) > 10e-13:
+        #    answer = fsolve(equations, answer, diag=scales)
+        #    errors = equations(answer)
+        #self.errors = np.linalg.norm(errors) / len(errors)
 
-            print(answer)
-            return answer
+        print(answer)
+        return answer
 
 
             #for i in range(len(self.ref_nodes)):
